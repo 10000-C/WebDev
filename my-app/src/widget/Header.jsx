@@ -9,7 +9,7 @@ function Header() {
            alt="logo"
            className='h-8 w-8'
         />
-        <h1 className='ml-4 text-4xl text-black'>Baller</h1>
+        <h1 className='ml-4 text-4xl font-black text-black'>Baller</h1>
       </div>
       <nav className='flex items-center'>
           <a href='#' className='mr-4'>
