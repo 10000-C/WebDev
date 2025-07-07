@@ -27,7 +27,7 @@ function Card({ image, title, description, mode = 'avatar', onClick }) {
           className="w-full h-48 object-cover rounded-xl mb-4 shadow"
         />
       )}
-      <h2 className="text-2xl font-bold text-blue-400 mb-2 text-center">{title}</h2>
+      <h2 className="text-2xl font-bold text-pink-400 mb-2 text-center">{title}</h2>
       <p className="text-lg text-gray-600 text-center">{description}</p>
     </div>
   )

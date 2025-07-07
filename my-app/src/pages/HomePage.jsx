@@ -5,7 +5,7 @@ import Card from '../components/Card'
 
 function HomePage() {
   return (
-    <div className='min-h-screen flex flex-col bg-gradient-to-r from-blue-500 via-white to-blue-500'>
+    <div className='min-h-screen flex flex-col bg-gradient-to-r from-blue-500 via-white to-blue-300'>
       <div className='container mx-auto p-4'>
         <Header />
       </div>
