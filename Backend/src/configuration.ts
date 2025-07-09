@@ -4,9 +4,11 @@ import * as validate from '@midwayjs/validate';
 import * as info from '@midwayjs/info';
 import * as orm from '@midwayjs/typeorm';
 import { join } from 'path';
+import * as crossDomain from '@midwayjs/cross-domain';
 // import { DefaultErrorFilter } from './filter/default.filter';
 // import { NotFoundFilter } from './filter/notfound.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
+import * as typeorm from '@midwayjs/typeorm';
 
 @Configuration({
   imports: [
@@ -17,6 +19,8 @@ import { ReportMiddleware } from './middleware/report.middleware';
       enabledEnvironment: ['local'],
     },
     orm,
+    crossDomain,
+    typeorm,
   ],
   importConfigs: [join(__dirname, './config')],
 })

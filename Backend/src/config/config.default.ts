@@ -14,9 +14,14 @@ export default {
         synchronize: true,           // 自动同步实体（生产环境关闭）
         logging: true,               // 开启日志
         entities: [
-          '**/entity/*.entity{.ts,.js}' // 实体文件路径
+           'entity',                 // 特定目录
+          '**/*.entity.{j,t}s',     // 通配加后缀匹配
         ],
       }
     }
+  },
+  jwt: {
+    secret: 'your_strong_secret_here', // 至少32字符的强密钥
+    expiresIn: '2d', // 令牌有效期
   },
 } as MidwayConfig;

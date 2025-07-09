@@ -1,28 +1,29 @@
-import { Inject, Provide } from '@midwayjs/core';
-//import { InjectEntityManager } from '@midwayjs/typeorm';
-import {  EntityManager } from 'typeorm';
+import {  Provide } from '@midwayjs/core';
+import {  Repository } from 'typeorm';
+import { InjectEntityModel } from '@midwayjs/typeorm';
 import { User } from '../entity/user.entity';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 
 @Provide()
 export class UserService {
-  @Inject()
-  entityManager: EntityManager;
+  @InjectEntityModel(User)  
+  entityManager: Repository<User>;;
 
   // 创建用户
-  async createUser(name: string, password: string, role: string) {
+  async createUser(name: string, password: string, email: string, role: string) {
     password = await bcrypt.hash(password, 10);
     
     const user = new User();
     user.name = name;
     user.password = password;
+    user.email = email;
     user.role = role;
-    return this.entityManager.save(User, user);
+    return this.entityManager.save(user);
   }
 
   async getUserByName(name: string) {
-    return this.entityManager.findOne(User, {
+    return this.entityManager.findOne({
       where: {
         name: name,
       }
