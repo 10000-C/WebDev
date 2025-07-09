@@ -30,6 +30,13 @@ export class UserService {
     });
   }
   
+  async getUserByEmail(email: string) {
+    return this.entityManager.findOne({
+      where: {
+        email: email,
+      }
+    });
+  }
 async returnUserData(user: User) {
   const token = jwt.sign(
     {

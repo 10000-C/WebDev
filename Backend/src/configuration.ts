@@ -9,6 +9,8 @@ import * as crossDomain from '@midwayjs/cross-domain';
 // import { NotFoundFilter } from './filter/notfound.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
 import * as typeorm from '@midwayjs/typeorm';
+import * as jwt from '@midwayjs/jwt';
+import * as passport from '@midwayjs/passport';
 
 @Configuration({
   imports: [
@@ -21,6 +23,8 @@ import * as typeorm from '@midwayjs/typeorm';
     orm,
     crossDomain,
     typeorm,
+    jwt,
+    passport,
   ],
   importConfigs: [join(__dirname, './config')],
 })

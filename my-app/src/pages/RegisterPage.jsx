@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import Header from '../widget/Header';
 import { useNavigate } from 'react-router-dom';
 import InputField from '../components/InputField'; // 引入新组件
 import bcry from 'bcryptjs'; // 引入bcrypt用于密码哈希
+import { useApi } from '../context/ApiContext'; // 使用自定义的API上下文
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const apiClient = useApi();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -18,7 +20,7 @@ function RegisterPage() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if(formData.password !== formData.confirmPassword) {
       alert('Passwords do not match!');
@@ -33,8 +35,15 @@ function RegisterPage() {
         password: hashedPassword,
     };
 
-    // todo: send data to backend for registration
-    navigate('/login');
+    try {
+      const response = await apiClient.post('/user/register', data);
+      apiClient.setToken(response.data.token);
+      navigate('/login');
+    }catch (error) { 
+      console.error('Registration failed:', error);
+      alert(`Registration failed: ${error.response?.data?.message || error.message}`);
+    }  
+    
   };
 
   return (
@@ -48,7 +57,6 @@ function RegisterPage() {
           <h2 className='text-2xl font-bold text-gray-800 mb-6'>Create Account</h2>
           
           <form onSubmit={handleSubmit}>
-            {/* 使用InputField组件 */}
             <InputField
               label="Username"
               name="username"

@@ -21,7 +21,7 @@ export default {
     }
   },
   jwt: {
-    secret: 'your_strong_secret_here', // 至少32字符的强密钥
+    secret: 'surpriseMotherFuckGodDamnitALLBullShit', // todo: 在生产环境中从环境变量中获取
     expiresIn: '2d', // 令牌有效期
   },
 } as MidwayConfig;

@@ -18,25 +18,27 @@ export class UserController {
       password: string;
     };
     
-    const temp = await this.userService.getUserByName(params.name);
+    let temp = await this.userService.getUserByName(params.name);
     if(temp !== null) {
       return { success: false, message: 'User already exists' };
     }
+    temp = await this.userService.getUserByEmail(params.email);
+    if(temp !== null) {
+      return { success: false, message: 'Email already exists' };
+    }
 
     this.userService.createUser(params.name, params.password, params.email, 'user');
-    //const data = await this.userService.returnUserData(user);
     return { success: true, message: 'OK'};
   }
 
   @Post('/login')
   async login() {
     const params = this.ctx.request.body as {
-      name: string;
       password: string;
       email: string;
     };
 
-    const user = await this.userService.getUserByName(params.name);
+    const user = await this.userService.getUserByEmail(params.email);
     if(user === null)
       return { success: false, message: 'User does not exist' };
     
