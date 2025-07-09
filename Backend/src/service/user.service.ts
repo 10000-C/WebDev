@@ -1,15 +1,16 @@
-import {  Provide } from '@midwayjs/core';
+import {  Provide, Inject } from '@midwayjs/core';
 import {  Repository } from 'typeorm';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { User } from '../entity/user.entity';
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@midwayjs/jwt';
 
 @Provide()
 export class UserService {
   @InjectEntityModel(User)  
   entityManager: Repository<User>;;
-
+  @Inject()
+  jwt : JwtService;
   // 创建用户
   async createUser(name: string, password: string, email: string, role: string) {
     password = await bcrypt.hash(password, 10);
@@ -38,7 +39,7 @@ export class UserService {
     });
   }
 async returnUserData(user: User) {
-  const token = jwt.sign(
+  const token = await this.jwt.sign(
     {
       id: user.id, // 用户唯一ID（最重要！）
       
@@ -48,7 +49,6 @@ async returnUserData(user: User) {
       // 系统信息（可选）
       iat: Math.floor(Date.now() / 1000), // 签发时间
     },
-    process.env.JWT_SECRET, // 密钥（必须从环境变量获取）
     { expiresIn: '2h' } // 有效期
   );
 

@@ -26,18 +26,15 @@ function RegisterPage() {
       alert('Passwords do not match!');
       return;
     }
-    const salt = bcry.genSaltSync(10);
-    const hashedPassword = bcry.hashSync(formData.password, salt);
 
     const data={
-        username: formData.username,
+        name: formData.username,
         email: formData.email,
-        password: hashedPassword,
+        password: formData.password,
     };
 
     try {
-      const response = await apiClient.post('/user/register', data);
-      apiClient.setToken(response.data.token);
+      await apiClient.post('/user/register', data);
       navigate('/login');
     }catch (error) { 
       console.error('Registration failed:', error);

@@ -12,6 +12,7 @@ export class UserController {
   ctx: Context;
   @Post('/register')
   async createUser() {
+     this.ctx.logger.info('注册请求:', this.ctx.request.body);
     const params = this.ctx.request.body as{
       name: string;
       email: string;
@@ -27,7 +28,8 @@ export class UserController {
       return { success: false, message: 'Email already exists' };
     }
 
-    this.userService.createUser(params.name, params.password, params.email, 'user');
+    await this.userService.createUser(params.name, params.password, params.email, 'user');
+    this.ctx.logger.info(`用户注册成功: ${params.email}`);
     return { success: true, message: 'OK'};
   }
 
@@ -45,6 +47,7 @@ export class UserController {
     const isCorrect = bcrypt.compare(params.password, user.password);
     if(isCorrect) {
       const data = this.userService.returnUserData(user);
+      this.ctx.logger.info(`用户登录成功: ${user.email}`);
       return{success: true, message: 'OK', data};
     }
     else return {success: false, message: 'Password is incorrect'};
