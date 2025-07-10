@@ -21,16 +21,16 @@ export class UserController {
     
     let temp = await this.userService.getUserByName(params.name);
     if(temp !== null) {
-      return { success: false, message: 'User already exists' };
+      return { success: false, message: 'User already exists' , data: null};
     }
     temp = await this.userService.getUserByEmail(params.email);
     if(temp !== null) {
-      return { success: false, message: 'Email already exists' };
+      return { success: false, message: 'Email already exists' ,data: null};
     }
 
     await this.userService.createUser(params.name, params.password, params.email, 'user');
     this.ctx.logger.info(`用户注册成功: ${params.email}`);
-    return { success: true, message: 'OK'};
+    return { success: true, message: 'OK',data: null };
   }
 
   @Post('/login')
@@ -42,7 +42,7 @@ export class UserController {
 
     const user = await this.userService.getUserByEmail(params.email);
     if(user === null)
-      return { success: false, message: 'User does not exist' };
+      return { success: false, message: 'User does not exist', data: null };
     
     const isCorrect = bcrypt.compare(params.password, user.password);
     if(isCorrect) {
@@ -50,6 +50,6 @@ export class UserController {
       this.ctx.logger.info(`用户登录成功: ${user.email}`);
       return{success: true, message: 'OK', data};
     }
-    else return {success: false, message: 'Password is incorrect'};
+    else return {success: false, message: 'Password is incorrect',data: null};
   }
 }

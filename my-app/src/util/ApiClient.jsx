@@ -66,12 +66,27 @@ class ApiClient {
     // window.location.href = '/login';
   }
 
+  async handleResponse(promise) {
+    try {
+      const response = await promise;
+      const data = response.data;// 后端返回的信息存储在response.data中
+      if(!data.success) {
+        throw new Error(data.message);
+      }
+      return data;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        this.handleUnauthorized();
+      }
+      throw error;
+    }
+  }
   get(url, params = {}) {
     return this.instance.get(url, { params });
   }
 
-  post(url, data) {
-    return this.instance.post(url, data);
+  async post(url, data) {
+    return await this.handleResponse(this.instance.post(url, data));
   }
 
   put(url, data) {
