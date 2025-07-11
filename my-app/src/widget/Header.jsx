@@ -1,11 +1,14 @@
 import React from 'react';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom'; // 引入路由导航钩子
+import { useApi } from '../context/ApiContext';
 
 function Header() {
   const navigate = useNavigate(); // 获取导航函数
-
-  return (
+  const apiClient = useApi();
+  const token = apiClient.getToken();
+  if(token === "undefined" || token === null){
+    return (
     <div className='flex justify-between items-center h-10'>
       <div className='flex items-center' onClick={() => navigate('/')}>
         <img
@@ -38,7 +41,39 @@ function Header() {
         </div>
       </nav>
     </div>
-  );
+    );
+  }
+  else{
+    const userData = apiClient.getUserData();
+    const username = userData.name;
+    return (
+    <div className='flex justify-between items-center h-10'>
+      <div className='flex items-center' onClick={() => navigate('/')}>
+        <img
+           src="src/assets/react.svg"
+           alt="logo"
+           className='h-8 w-8'
+        />
+        <h1 className='ml-4 text-4xl font-black text-black'>Baller</h1>
+      </div>
+      <nav className='flex items-center'>
+        {/* todo: 显示用户名和头像 */}
+        <div className='mr-4'>
+          <Button 
+            variant='outline' 
+            size='md'
+            onClick={() => navigate('/profile')} // 跳转到个人资料页
+            className="flex items-center gap-2" // 添加自定义样式
+          >
+            {/* 用户头像占位符 */}
+            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-6 h-6" />
+            <span>{username}</span>
+          </Button>
+        </div>
+      </nav>
+    </div>
+    );
+  }
 }
 
 export default Header;

@@ -7,18 +7,14 @@ class ApiClient {
                     window.env?.REACT_APP_API_BASE_URL || 
                     'http://127.0.0.1:7001/';
     
-    // 修复点1：正确闭合配置对象
     this.instance = axios.create({
       baseURL,
       timeout: 10000,
       headers: { 'Content-Type': 'application/json' }
     });  // <-- 添加闭合括号
 
-    // 修复点2：将事件监听移至配置对象外部
     window.addEventListener('storage', (event) => {
       if (event.key === 'jwtToken') {
-        // 实际无需更新 this.token（拦截器每次从 localStorage 读取）
-        // 保留事件仅为示例，可完全删除此监听
       }
     });
 
@@ -46,15 +42,22 @@ class ApiClient {
     );
   }
 
-  // 其他方法保持不变...
+  setUserData(data) {
+    localStorage.setItem('userData', data);
+  }  
   setToken(token) {
     localStorage.setItem('jwtToken', token);
   }
-
+  getUserData() {
+    return localStorage.getItem('userData');
+  }  
   getToken() {
     return localStorage.getItem('jwtToken');
   }
 
+  clearUserData() {
+    localStorage.removeItem('userData');
+  }
   clearToken() {
     localStorage.removeItem('jwtToken');
   }
@@ -73,7 +76,7 @@ class ApiClient {
       if(!data.success) {
         throw new Error(data.message);
       }
-      return data;
+      return response;
     } catch (error) {
       if (error.response?.status === 401) {
         this.handleUnauthorized();

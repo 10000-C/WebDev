@@ -25,7 +25,9 @@ function LoginPage() {
     apiClient.clearToken();
     try {
       const response = await apiClient.post('/user/login', data);
-      apiClient.setToken(response.data.token);
+      const userData = response.data.data;
+      apiClient.setToken(userData.token);
+      apiClient.setUserData(userData);
       alert('Login successful!');
       navigate('/'); // 登录成功后重定向到首页
     } catch (error) {

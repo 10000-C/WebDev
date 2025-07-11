@@ -1,4 +1,4 @@
-import { Controller, Post, Inject } from '@midwayjs/core';
+import { Controller, Post, Inject, Get } from '@midwayjs/core';
 import { UserService } from '../service/user.service';
 import { Context } from '@midwayjs/koa';
 import * as bcrypt from 'bcryptjs';
@@ -12,7 +12,7 @@ export class UserController {
   ctx: Context;
   @Post('/register')
   async createUser() {
-     this.ctx.logger.info('注册请求:', this.ctx.request.body);
+    this.ctx.logger.info('注册请求:', this.ctx.request.body);
     const params = this.ctx.request.body as{
       name: string;
       email: string;
@@ -30,7 +30,7 @@ export class UserController {
 
     await this.userService.createUser(params.name, params.password, params.email, 'user');
     this.ctx.logger.info(`用户注册成功: ${params.email}`);
-    return { success: true, message: 'OK',data: null };
+    return { success: true, message: 'OK', data: null};
   }
 
   @Post('/login')
@@ -44,12 +44,17 @@ export class UserController {
     if(user === null)
       return { success: false, message: 'User does not exist', data: null };
     
-    const isCorrect = bcrypt.compare(params.password, user.password);
+    const isCorrect = await bcrypt.compare(params.password, user.password);
     if(isCorrect) {
-      const data = this.userService.returnUserData(user);
+      const data = await this.userService.returnUserData(user);
       this.ctx.logger.info(`用户登录成功: ${user.email}`);
       return{success: true, message: 'OK', data};
     }
     else return {success: false, message: 'Password is incorrect',data: null};
+  }
+
+  @Get('/info')
+  async getUserInfo() {
+     // todo
   }
 }

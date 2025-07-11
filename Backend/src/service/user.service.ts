@@ -56,7 +56,7 @@ async returnUserData(user: User) {
     id: user.id,
     name: user.name,
     role: user.role,
-    token
+    token: token,
   };
 }
 }
