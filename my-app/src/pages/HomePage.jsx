@@ -2,8 +2,10 @@ import React from 'react'
 import Header from '../widget/Header'
 import Hero from '../widget/Hero'
 import Card from '../components/Card'
+import { useNavigate } from 'react-router-dom';
 
 function HomePage() {
+  const navigate = useNavigate();
   return (
     <div className='min-h-screen flex flex-col bg-gradient-to-r from-blue-500 via-white to-blue-300'>
       <div className='container mx-auto p-4'>
@@ -18,7 +20,7 @@ function HomePage() {
         title="Excting Experience"
         description="Get the information of gyms around you."
         mode="large"
-        onClick={() => navigate('/your-target-path')}
+        onClick={() => navigate('/gyms')}
         />
         <Card
         image="https://www.redditstatic.com/avatars/avatar_default_02_24A0ED.png"

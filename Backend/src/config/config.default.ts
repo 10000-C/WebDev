@@ -22,6 +22,6 @@ export default {
   },
   jwt: {
     secret: 'surpriseMotherFuckGodDamnitALLBullShit', // todo: 在生产环境中从环境变量中获取
-    expiresIn: '2d', // 令牌有效期
+    expiresIn: '2h', // 令牌有效期
   },
 } as MidwayConfig;

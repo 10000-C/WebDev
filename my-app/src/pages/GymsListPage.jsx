@@ -1,0 +1,75 @@
+import React, { useState, useEffect, useContext } from 'react';
+import Header from '../widget/Header';
+import Card from '../components/Card';
+import { useApi } from '../context/ApiContext'; // 导入API上下文
+
+function GymsListPage() {
+  const [gyms, setGyms] = useState([]); // 存储健身房数据
+  const [loading, setLoading] = useState(true); // 加载状态
+  const [error, setError] = useState(null); // 错误信息
+  const apiClient = useApi(); // 获取API客户端实例
+
+  useEffect(() => {
+    const fetchGyms = async () => {
+      try {
+        setLoading(true);
+        // 使用ApiClient发送GET请求获取健身房数据
+        const response = await apiClient.get('/api/gyms');
+        setGyms(response.data.data); // 设置返回的数据
+      } catch (err) {
+        setError('Error: ' + err.message);
+        console.error('API请求错误:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGyms();
+  }, [apiClient]); // apiClient作为依赖项
+
+  return (
+    <div className='min-h-screen flex flex-col bg-gradient-to-r from-blue-500 via-white to-blue-300'>
+      <div className='container mx-auto p-4'>
+        <Header />
+      </div>
+
+      <div className="flex-1 container mx-auto p-4">
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <h1 className="text-3xl font-bold text-center mb-6">Gyms List</h1>
+          
+          {/* 加载状态 */}
+          {loading && <div className="text-center py-8">loading...</div>}
+          
+          {/* 错误提示 */}
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+              {error}
+            </div>
+          )}
+          
+          {/* 数据展示 */}
+          {!loading && !error && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {gyms.length > 0 ? (
+                gyms.map((gym) => (
+                  <Card 
+                    key={gym.id} 
+                    title={gym.name} 
+                    description={gym.description}
+                    image={gym.imageUrl}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-8 text-gray-500">
+                  Can't find data.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default GymsListPage;
