@@ -22,7 +22,7 @@ const Button = ({
   const sizeClasses = {
     sm: "text-sm py-1.5 px-3 rounded-md",
     md: "text-base py-2 px-4 rounded-md",
-    lg: "text-lg py-2.5 px-5 rounded-md"
+    lg: "text-lg py-2.5 px-5 rounded-md",
   }[size];
   
   // 宽度控制

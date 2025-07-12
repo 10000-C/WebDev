@@ -52,6 +52,8 @@ export class UserController {
     }
     else return {success: false, message: 'Password is incorrect',data: null};
   }
+  
+  @Post('/refresh')
 
   @Get('/info')
   async getUserInfo() {
