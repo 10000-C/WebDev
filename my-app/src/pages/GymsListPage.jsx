@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Header from '../widget/Header';
-import Card from '../components/Card';
+import GymCard from '../components/GymCard';
 import { useApi } from '../context/ApiContext'; // 导入API上下文
 
 function GymsListPage() {
@@ -51,12 +51,14 @@ function GymsListPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {gyms.length > 0 ? (
                 gyms.map((gym) => (
-                  <Card 
-                    key={gym.id} 
-                    title={gym.name} 
+                  <GymCard  // 替换为GymCard组件
+                    key={gym.id}
+                    name={gym.name}
                     description={gym.description}
+                    location={gym.location || "Unknown location"} // 添加位置信息
+                    price={gym.price || "Price not available"}    // 添加价格信息
                     image={gym.imageUrl}
-                    mode='large'
+                    rating={gym.rating || 0}                     // 添加评分信息
                   />
                 ))
               ) : (
