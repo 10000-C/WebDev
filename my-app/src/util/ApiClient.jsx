@@ -84,8 +84,8 @@ class ApiClient {
       throw error;
     }
   }
-  get(url, params = {}) {
-    return this.instance.get(url, { params });
+  async get(url, params = {}) {
+    return await this.handleResponse(this.instance.get(url, { params }));
   }
 
   async post(url, data) {

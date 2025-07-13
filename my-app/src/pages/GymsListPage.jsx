@@ -13,9 +13,8 @@ function GymsListPage() {
     const fetchGyms = async () => {
       try {
         setLoading(true);
-        // 使用ApiClient发送GET请求获取健身房数据
-        const response = await apiClient.get('/api/gyms');
-        setGyms(response.data.data); // 设置返回的数据
+        const response = await apiClient.get('/gyms/info', {});
+        setGyms(response.data.data);
       } catch (err) {
         setError('Error: ' + err.message);
         console.error('API请求错误:', err);
@@ -25,7 +24,7 @@ function GymsListPage() {
     };
 
     fetchGyms();
-  }, [apiClient]); // apiClient作为依赖项
+  }, [apiClient]); 
 
   return (
     <div className='min-h-screen flex flex-col bg-gradient-to-r from-blue-500 via-white to-blue-300'>
@@ -57,6 +56,7 @@ function GymsListPage() {
                     title={gym.name} 
                     description={gym.description}
                     image={gym.imageUrl}
+                    mode='large'
                   />
                 ))
               ) : (
