@@ -10,19 +10,6 @@ export class GymsController {
     @Inject()
     gymService: GymService;
 
-    @Get('/info')
-    async getGymInfo(@Query('gid') gid: number) {
-        if(!gid) {
-            const data = await this.gymService.getGymInfo(null);
-            if(Array.isArray(data) && data.length === 0) return { success: false, message: 'No data in database', data: null};
-            return { success: true, message:'Get the data of all gyms' , data: data}
-        }
-        else {
-            const data = await this.gymService.getGymInfo(gid);
-            if(data === null) return { success: false, message: 'No data', data: null};
-            return { success: true, message:'Get the data of id:'+gid+' gym', data: data};
-        }
-    }
 
     @Post('/create')
     async createGym() {
@@ -53,5 +40,19 @@ export class GymsController {
         if(result.affected === 0) 
             return { success: false, message: 'Gym not found or already deleted', data: null};
         return { success: true, message: 'Gym '+gid+' is deleted', data: null };
+    }
+
+    @Get('/info')
+    async searchGym(@Query('keyword') keyword: string) {
+        if(keyword === null || keyword === '' || keyword === undefined) {
+            this.ctx.logger.info('No keyword provided, retrieving all gyms');
+            const data = await this.gymService.getGymInfo(null);
+            return { success: true, message: 'All gyms retrieved', data: data };
+        }
+        const data = await this.gymService.searchGym(keyword);
+        this.ctx.logger.info(`Search gyms with keyword: ${keyword}`);
+        if(data.length === 0) 
+            return { success: false, message: 'No results found', data: null};
+        return { success: true, message: 'Search results for keyword: '+keyword, data: data}
     }
 }

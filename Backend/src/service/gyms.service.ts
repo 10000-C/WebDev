@@ -31,4 +31,10 @@ export class GymService {
   async delGym(gid: number) {
     return await this.entityManager.delete(gid);
   }
+
+  async searchGym(keyword: string) {
+    return await this.entityManager.createQueryBuilder('gym')
+      .where('gym.name LIKE :keyword OR gym.description LIKE :keyword', { keyword: `%${keyword}%` })
+      .getMany();
+  }
 }
