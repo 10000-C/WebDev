@@ -17,9 +17,8 @@ function GymsListPage() {
     const fetchGyms = async () => {
       try {
         setLoading(true);
-        // 构建查询字符串
-        const queryString = searchTerm ? `?keyword=${encodeURIComponent(searchTerm)}` : '';
-        const response = await apiClient.get(`/gyms/info${queryString}`);
+        const params = searchTerm ? { keyword: searchTerm } : {};
+        const response = await apiClient.get('/gyms/info', params);
         setGyms(response.data.data);
       } catch (err) {
         setError('Error: ' + err.message);
