@@ -23,7 +23,7 @@ export class ActivityService {
     activity.description = data.description;
     activity.location = data.location;
     activity.price = data.price;
-    activity.currentParticipants = data.currentParticipants;
+    activity.currentParticipants = 0;
     activity.maxParticipants = data.maxParticipants;
     return await this.entityManager.save(activity);
   }

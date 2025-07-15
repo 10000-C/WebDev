@@ -18,7 +18,6 @@ export class ActivitiesController {
             description: string;
             location: string;
             price: string;
-            currentParticipants: number;
             maxParticipants: number;
         };
         await this.activityService.createActivity(data);

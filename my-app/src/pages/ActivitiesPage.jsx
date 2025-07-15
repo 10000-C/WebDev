@@ -4,6 +4,8 @@ import ActivityCard from '../components/ActivityCard';
 import { useApi } from '../context/ApiContext';
 import SearchBox from '../components/SearchBox';
 import Button from '../components/Button';
+import Modal from '../components/Modal';
+import ActivityForm from '../components/ActivityForm';
 
 function ActivitiesPage() {
   const [activities, setActivities] = useState([]);
@@ -11,6 +13,7 @@ function ActivitiesPage() {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [triggerSearch, setTriggerSearch] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const apiClient = useApi();
 
   // 获取活动数据
@@ -37,6 +40,17 @@ function ActivitiesPage() {
     setTriggerSearch(prev => prev + 1);
   };
 
+  const handleFormSubmit = async (formData) => {
+  try {
+    await apiClient.post('/activities/create', formData);
+    alert('活动创建成功！');
+    setIsModalOpen(false); // 关闭模态框
+    setTriggerSearch(prev => prev + 1); // 刷新活动列表
+  } catch (error) {
+    console.error('创建活动失败:', error);
+    alert(`创建活动失败: ${error.message}`);
+  }
+};
   return (
     <div className='min-h-screen flex flex-col bg-gradient-to-r from-blue-500 via-white to-blue-300'>
       <div className='container mx-auto p-4'>
@@ -61,12 +75,20 @@ function ActivitiesPage() {
             <h1 className="text-2xl font-bold text-gray-800">所有活动</h1>
             <Button 
               variant="primary"
-              onClick={() => console.log('跳转到创建活动页面')}
+              onClick={() => setIsModalOpen(true)}
             >
               创建活动
             </Button>
           </div>
-          
+          {/*模态框和表单 */}
+          {isModalOpen && (
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+              <ActivityForm 
+                onSubmit={handleFormSubmit} 
+                onCancel={() => setIsModalOpen(false)} 
+              />
+            </Modal>
+          )}
           {/* 加载状态 */}
           {loading && (
             <div className="flex justify-center py-8">
