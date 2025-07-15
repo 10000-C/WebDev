@@ -1,6 +1,7 @@
 import { Controller, Post, Inject, Get, Del, Query } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { ActivityService } from '../service/activities.service';
+import { Mutex } from 'async-mutex';
 
 @Controller('/activities')
 export class ActivitiesController { 
@@ -10,6 +11,29 @@ export class ActivitiesController {
     @Inject()
     activityService: ActivityService;
 
+    private applyActivityMutex = new Mutex();
+    @Get('/application')
+    async applyActivity(@Query('aid') aid: number) {
+        return await this.applyActivityMutex.runExclusive(async () => {
+        this.ctx.logger.info(`Applying for activity with ID: ${aid}`);
+            
+        const activity = await this.activityService.getActivityInfo(aid);
+        if (!activity) {
+            return { success: false, message: 'Activity not found' };
+        }
+        if(Array.isArray(activity)) {
+            return { success: false, message: 'Invalid activity ID' };
+        }    
+        if (activity.currentParticipants >= activity.maxParticipants) {
+            return { success: false, message: 'Activity is full' };
+        }
+
+        activity.currentParticipants += 1;
+        await this.activityService.updateActivity(activity);
+
+        return { success: true, message: 'Applied successfully' };
+    });
+    }
 
     @Post('/create')
     async createActivity() {

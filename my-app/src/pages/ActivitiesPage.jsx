@@ -41,15 +41,27 @@ function ActivitiesPage() {
   };
 
   const handleFormSubmit = async (formData) => {
-  try {
-    await apiClient.post('/activities/create', formData);
-    alert('活动创建成功！');
-    setIsModalOpen(false); // 关闭模态框
-    setTriggerSearch(prev => prev + 1); // 刷新活动列表
-  } catch (error) {
-    console.error('创建活动失败:', error);
-    alert(`创建活动失败: ${error.message}`);
-  }
+    try {
+      await apiClient.post('/activities/create', formData);
+      alert('活动创建成功！');
+      setIsModalOpen(false); // 关闭模态框
+      setTriggerSearch(prev => prev + 1); // 刷新活动列表
+    } catch (error) {
+      console.error('创建活动失败:', error);
+      alert(`创建活动失败: ${error.message}`);
+    }
+  }; 
+  const handleApplication = async (activityId) => {
+    try {
+      console.log('申请活动:', activityId);
+      const params = {aid: activityId ,gid:};
+      await apiClient.get('/activities/application', params);
+      alert('报名成功！');
+      setTriggerSearch(prev => prev + 1); // 刷新活动列表
+    } catch (error) {
+      console.error('报名失败:', error);
+      alert(`报名失败: ${error.message}`);
+    }
 };
   return (
     <div className='min-h-screen flex flex-col bg-gradient-to-r from-blue-500 via-white to-blue-300'>
@@ -116,6 +128,7 @@ function ActivitiesPage() {
                     price={activity.price}
                     cuNumber={activity.currentParticipants}
                     limitNumber={activity.maxParticipants}
+                    onClick={() => handleApplication(activity.id)}
                   />
                 ))
               ) : (
@@ -131,4 +144,4 @@ function ActivitiesPage() {
   );
 }
 
-export default ActivitiesPage;
+export default ActivitiesPage

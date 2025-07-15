@@ -38,7 +38,7 @@ export class UserService {
       }
     });
   }
-async returnUserData(user: User) {
+  async returnUserData(user: User) {
   const token = await this.jwt.sign(
     {
       id: user.id, // 用户唯一ID（最重要！）
@@ -50,13 +50,13 @@ async returnUserData(user: User) {
       iat: Math.floor(Date.now() / 1000), // 签发时间
     },
     { expiresIn: '2h' } // 有效期
-  );
+    );
 
-  return {
-    id: user.id,
-    name: user.name,
-    role: user.role,
-    token: token,
-  };
-}
+    return {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+      token: token,
+    };
+  }
 }

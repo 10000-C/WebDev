@@ -37,4 +37,8 @@ export class ActivityService {
       .where('activity.name LIKE :keyword OR activity.description LIKE :keyword', { keyword: `%${keyword}%` })
       .getMany();
   }
+
+  async updateActivity(activity: Activity) {
+    return await this.entityManager.save(activity);
+  }
 }

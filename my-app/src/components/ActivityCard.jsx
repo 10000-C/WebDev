@@ -13,7 +13,6 @@ const ActivityCard = ({
   return (
     <div 
       className="bg-white rounded-xl shadow-md p-6 mb-4 flex flex-col md:flex-row justify-between items-start md:items-center w-full transition-all duration-300 hover:shadow-lg"
-      onClick={onClick}
     >
       {/* 左侧活动信息 */}
       <div className="flex-1 mb-4 md:mb-0">
@@ -49,7 +48,7 @@ const ActivityCard = ({
           size="sm"
           onClick={(e) => {
             e.stopPropagation();
-            // 处理报名逻辑
+            onClick && onClick();
           }}
         >
           报名
