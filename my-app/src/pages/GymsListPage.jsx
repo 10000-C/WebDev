@@ -46,14 +46,14 @@ function GymsListPage() {
         <SearchBox 
           value={searchTerm}
           onChange={handleSearchTrigger} 
-          placeholder="搜索健身房名称或位置..."
+          placeholder="press Enter to search gym..."
         />
       </div>
       </div>
   
       <div className="flex-1 container mx-auto p-4">
         <div className="bg-white rounded-xl shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-center mb-6">Gyms List</h1>
+          <h1 className="text-3xl font-bold text-pink-500 text-center mb-6">Gyms List</h1>
           
           {/* 加载状态 */}
           {loading && <div className="text-center py-8">loading...</div>}

@@ -5,6 +5,8 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import GymsListPage from './pages/GymsListPage';
+import ActivitiesPage from './pages/ActivitiesPage';
+
 
 const TokenChecker = () => {
   const navigate = useNavigate();
@@ -40,6 +42,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gyms" element={<GymsListPage />} />
+          <Route path="/activities" element={<ActivitiesPage />} />
         </Routes>
       </Router>
     </ApiProvider>

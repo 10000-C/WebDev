@@ -27,7 +27,7 @@ function HomePage() {
         title="Friendly Connections"
         description="Have conversations about sports and find guys who have same interest."
         mode="avatar"
-        onClick={() => navigate('/your-target-path')}
+        onClick={() => navigate('/activities')}
         />
       </div>
     </div>
