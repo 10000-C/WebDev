@@ -4,6 +4,7 @@ import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Activity } from '../entity/activities.entity';
 import { JwtService } from '@midwayjs/jwt';
 
+
 @Provide()
 export class ActivityService {
   @InjectEntityModel(Activity)  
@@ -24,6 +25,7 @@ export class ActivityService {
     activity.location = data.location;
     activity.price = data.price;
     activity.currentParticipants = 0;
+    activity.participantList = [];
     activity.maxParticipants = data.maxParticipants;
     return await this.entityManager.save(activity);
   }
@@ -40,5 +42,18 @@ export class ActivityService {
 
   async updateActivity(activity: Activity) {
     return await this.entityManager.save(activity);
+  }
+
+  async isExisted(activity: Activity, uid: number) { 
+    const existedParticipants = activity.participantList;
+    if(existedParticipants === null || existedParticipants.length === 0) {
+      return false;
+    }
+    for(const cuUid of existedParticipants) {
+      if(cuUid == uid) {
+          return true;
+      }
+    }
+    return false;    
   }
 }

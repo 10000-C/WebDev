@@ -22,4 +22,7 @@ export class Activity {
 
   @Column()
   maxParticipants: number;
+
+  @Column('simple-array')
+  participantList: number[];
 }

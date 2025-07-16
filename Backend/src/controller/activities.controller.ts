@@ -15,8 +15,10 @@ export class ActivitiesController {
     @Get('/application')
     async applyActivity(@Query('aid') aid: number) {
         return await this.applyActivityMutex.runExclusive(async () => {
-        this.ctx.logger.info(`Applying for activity with ID: ${aid}`);
-            
+        const uid = this.ctx.state.user?.id;
+        if (uid === undefined || uid === null) {
+            return { success: false, message: 'User not logged in' };
+        }
         const activity = await this.activityService.getActivityInfo(aid);
         if (!activity) {
             return { success: false, message: 'Activity not found' };
@@ -24,11 +26,20 @@ export class ActivitiesController {
         if(Array.isArray(activity)) {
             return { success: false, message: 'Invalid activity ID' };
         }    
+
+        const isParticipant = await this.activityService.isExisted(activity, uid);
+        
+        if (isParticipant) {
+            this.ctx.logger.info(`User ${uid} is already a participant of activity ${aid}`);
+            return { success: false, message: 'User is already a participant' };
+        }
         if (activity.currentParticipants >= activity.maxParticipants) {
             return { success: false, message: 'Activity is full' };
         }
 
+        this.ctx.logger.info(`User ${uid} applied for activity ${aid}`);
         activity.currentParticipants += 1;
+        activity.participantList.push(uid);
         await this.activityService.updateActivity(activity);
 
         return { success: true, message: 'Applied successfully' };
@@ -43,6 +54,7 @@ export class ActivitiesController {
             location: string;
             price: string;
             maxParticipants: number;
+            participantList: [];
         };
         await this.activityService.createActivity(data);
         return { success: true, message: 'OK', data: null };

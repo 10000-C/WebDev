@@ -54,7 +54,7 @@ function ActivitiesPage() {
   const handleApplication = async (activityId) => {
     try {
       console.log('申请活动:', activityId);
-      const params = {aid: activityId ,gid:};
+      const params = {aid: activityId};
       await apiClient.get('/activities/application', params);
       alert('报名成功！');
       setTriggerSearch(prev => prev + 1); // 刷新活动列表
