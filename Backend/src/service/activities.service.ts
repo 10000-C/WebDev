@@ -23,6 +23,7 @@ export class ActivityService {
     activity.name = data.name;
     activity.description = data.description;
     activity.location = data.location;
+    activity.date = data.date;
     activity.price = data.price;
     activity.currentParticipants = 0;
     activity.participantList = [];

@@ -53,6 +53,7 @@ export class ActivitiesController {
             description: string;
             location: string;
             price: string;
+            date: string;
             maxParticipants: number;
             participantList: [];
         };

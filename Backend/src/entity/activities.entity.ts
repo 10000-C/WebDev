@@ -18,6 +18,9 @@ export class Activity {
   price: string;
 
   @Column()
+  date: string;
+
+  @Column()
   currentParticipants: number;
 
   @Column()
