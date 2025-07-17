@@ -78,7 +78,16 @@ export class ActivitiesController {
     }
 
     @Get('/info')
-    async searchActivity(@Query('keyword') keyword: string) {
+    async searchActivity(@Query('keyword') keyword?: string, @Query('aid') aid?: number) {
+        if(aid !== undefined && aid !== null) {
+            const data = await this.activityService.getActivityInfo(aid);
+            if(data === null) {
+                this.ctx.logger.info('Activity not found');
+                return { success: false, message: 'Activity not found', data: null };
+            }
+            this.ctx.logger.info(`Activity info retrieved for ID: ${aid}`);
+            return { success: true, message: 'Activity info retrieved', data: data };
+        }
         if(keyword === null || keyword === '' || keyword === undefined) {
             this.ctx.logger.info('No keyword provided, retrieving all gyms');
             const data = await this.activityService.getActivityInfo(null);

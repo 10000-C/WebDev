@@ -6,6 +6,7 @@ import SearchBox from '../components/SearchBox';
 import Button from '../components/Button';
 import Modal from '../components/Modal';
 import ActivityForm from '../components/ActivityForm';
+import { useNavigate } from 'react-router-dom';
 
 function ActivitiesPage() {
   const [activities, setActivities] = useState([]);
@@ -15,7 +16,7 @@ function ActivitiesPage() {
   const [triggerSearch, setTriggerSearch] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const apiClient = useApi();
-
+  const navigate = useNavigate();
   // 获取活动数据
   useEffect(() => {
     const fetchActivities = async () => {
@@ -128,7 +129,8 @@ function ActivitiesPage() {
                     price={activity.price}
                     cuNumber={activity.currentParticipants}
                     limitNumber={activity.maxParticipants}
-                    onClick={() => handleApplication(activity.id)}
+                    onApplyClick={() => handleApplication(activity.id)}
+                    onDetailClick={() => alert('todo: 查看详情功能未实现')}
                   />
                 ))
               ) : (

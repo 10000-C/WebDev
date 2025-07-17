@@ -8,7 +8,8 @@ const ActivityCard = ({
   price,
   cuNumber,
   limitNumber,
-  onClick 
+  onDetailClick, // 新增查看详情回调函数
+  onApplyClick   // 报名回调函数
 }) => {
   return (
     <div 
@@ -37,18 +38,34 @@ const ActivityCard = ({
         </div>
       </div>
       
-      {/* 右侧人数和按钮 */}
-      <div className="flex flex-col items-end">
+      {/* 右侧按钮区域*/}
+      <div className="flex flex-col items-end space-y-2"> {/* 添加垂直间距 */}
         <div className="mb-2">
           <span className="text-blue-600 font-bold">{cuNumber}</span>
           <span className="text-gray-500"> / {limitNumber} 人</span>
         </div>
+        
+        {/* 查看详情按钮 */}
+        <Button 
+          variant="outline" 
+          size="sm"
+          className="w-full" // 使按钮宽度与容器相同
+          onClick={(e) => {
+            e.stopPropagation();
+            onDetailClick && onDetailClick();
+          }}
+        >
+          查看详情
+        </Button>
+        
+        {/* 报名按钮 */}
         <Button 
           variant="primary" 
           size="sm"
+          className="w-full" // 使按钮宽度与容器相同
           onClick={(e) => {
             e.stopPropagation();
-            onClick && onClick();
+            onApplyClick && onApplyClick();
           }}
         >
           报名
