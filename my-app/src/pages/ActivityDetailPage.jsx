@@ -51,7 +51,8 @@ function ActivityDetailPage() {
       await apiClient.get('/activities/application', params);
       alert('报名成功！');
       // 刷新详情数据
-      fetchActivityDetails();
+      const response = await apiClient.get('/activities/info', params);
+      setActivity(response.data.data || null);
     } catch (error) {
       console.error('报名失败:', error);
       alert(`报名失败: ${error.message}`);
@@ -141,7 +142,7 @@ function ActivityDetailPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-700 mb-1">时间</h3>
-                    <p className="text-gray-800 text-lg">{activity.startTime} - {activity.endTime}</p>
+                    <p className="text-gray-800 text-lg">{activity.date}</p>
                   </div>
                 </div>
                 

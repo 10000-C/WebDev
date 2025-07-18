@@ -4,7 +4,7 @@ import ActivityCard from '../components/ActivityCard';
 import { useApi } from '../context/ApiContext';
 import SearchBox from '../components/SearchBox';
 import Button from '../components/Button';
-import Modal from '../components/Modal';
+import Modal from '../widget/Modal';
 import ActivityForm from '../components/ActivityForm';
 import { useNavigate } from 'react-router-dom';
 
@@ -124,13 +124,14 @@ function ActivitiesPage() {
                   <ActivityCard
                     key={activity.id}
                     title={activity.name}
+                    date={activity.date}
                     description={activity.description}
                     location={activity.location}
                     price={activity.price}
                     cuNumber={activity.currentParticipants}
                     limitNumber={activity.maxParticipants}
                     onApplyClick={() => handleApplication(activity.id)}
-                    onDetailClick={() => alert('todo: 查看详情功能未实现')}
+                    onDetailClick={() => navigate(`/activities/${activity.id}`)}
                   />
                 ))
               ) : (
