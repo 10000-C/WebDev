@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Comment from './Comment';
-import Button from './Button';
+import Comment from '../components/Comment';
+import Button from '../components/Button';
 
 const CommentSection = ({ comments, onAddComment }) => {
   const [newComment, setNewComment] = useState('');

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useApi } from '../context/ApiContext';
 import Header from '../widget/Header';
 import Button from '../components/Button';
-import CommentSection from '../components/CommentSection';
+import CommentSection from '../widget/CommentSection';
 
 function ActivityDetailPage() {
   const { activityId } = useParams();
@@ -12,20 +12,28 @@ function ActivityDetailPage() {
   const [error, setError] = useState(null);
   const apiClient = useApi();
   const navigate = useNavigate();
-  const [comments, setComments] = useState([
-    // 示例数据
-    { username: '张三', content: '这个活动很棒！', time: '2023-10-15T14:30:00Z' },
-    { username: '李四', content: '期待参加！', time: '2023-10-16T09:15:00Z' },
-  ]);
+  const [comments, setComments] = useState([]);
 
-  const handleAddComment = (content) => {
-    // 模拟新评论
+  const handleAddComment = async (content) => {
+    const userData = apiClient.getUserData();
+    const userName = userData.name;
+    const uid = userData.id;
     const newComment = {
-      username: '当前用户', // 实际应用中应该从登录状态获取
-      content,
-      time: new Date().toISOString(),
+      content: content,
+      uid: uid,
+      aid: activityId,
+      username: userName,
     };
-    setComments([newComment, ...comments]);
+    try{
+      await apiClient.post('/comment/create', newComment);
+      const response = await apiClient.get('/comment/info', { aid: activityId });
+      let commentData = response.data.data;
+      setComments(commentData);
+      console.log('评论添加成功:', commentData);
+    }catch(error){
+      console.error('Error adding comment:', error);
+    }
+    
   };
   useEffect(() => {
     const fetchActivityDetails = async () => {
@@ -43,7 +51,17 @@ function ActivityDetailPage() {
     };
     
     fetchActivityDetails();
-  }, [apiClient, activityId]);
+    const fetchComments = async () => {
+      try {
+        const response = await apiClient.get('/comment/info', { aid: activityId });
+        setComments(response.data.data || []);
+      } catch (err) {
+        console.error('获取评论失败:', err);
+      }
+
+    };
+    fetchComments();
+  }, [apiClient, activityId, setComments]);
 
   const handleApplication = async () => {
     try {

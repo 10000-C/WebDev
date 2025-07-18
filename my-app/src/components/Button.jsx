@@ -15,7 +15,7 @@ const Button = ({
     primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50",
     secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50",
     outline: "border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-50 focus:ring-2 focus:ring-blue-300 focus:ring-opacity-30",
-    text: "text-blue-600 hover:text-blue-800 underline hover:no-underline"
+    text: "text-blue-600 hover:text-blue-800 hover:no-underline"
   }[variant];
   
   // 尺寸样式

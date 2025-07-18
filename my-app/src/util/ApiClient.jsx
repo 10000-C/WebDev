@@ -43,13 +43,19 @@ class ApiClient {
   }
 
   setUserData(data) {
-    localStorage.setItem('userData', data);
+    localStorage.setItem('userData',JSON.stringify(data));
   }  
   setToken(token) {
     localStorage.setItem('jwtToken', token);
   }
   getUserData() {
-    return localStorage.getItem('userData');
+    const data = localStorage.getItem('userData');
+    try {
+      return data ? JSON.parse(data) : null;
+    } catch (e) {
+      console.error('Failed to parse userData:', e);
+      return null;
+    }
   }  
   getToken() {
     return localStorage.getItem('jwtToken');
