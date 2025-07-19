@@ -10,7 +10,8 @@ const ActivityCard = ({
   cuNumber,
   limitNumber,
   onDetailClick,
-  onApplyClick
+  onApplyClick,
+  isParticipant,
 }) => {
   return (
     <div 
@@ -75,7 +76,7 @@ const ActivityCard = ({
             onApplyClick && onApplyClick();
           }}
         >
-          报名
+          {isParticipant ? '取消报名' : '报名'}
         </Button>
       </div>
     </div>

@@ -38,12 +38,34 @@ export class ActivitiesController {
         }
 
         this.ctx.logger.info(`User ${uid} applied for activity ${aid}`);
-        activity.currentParticipants += 1;
-        activity.participantList.push(uid);
-        await this.activityService.updateActivity(activity);
-
+        await this.activityService.addParticipant(activity, uid);
         return { success: true, message: 'Applied successfully' };
     });
+    }
+
+    @Get('/cancel')
+    async cancelActivity(@Query('aid') aid: number) { 
+        return await this.applyActivityMutex.runExclusive(async () => { 
+            const uid = this.ctx.state.user?.id;
+            if (uid === undefined || uid === null) {
+               return { success: false, message: 'User not logged in' };
+            }
+            const activity = await this.activityService.getActivityInfo(aid);
+            if (!activity) {
+                return { success: false, message: 'Activity not found' };
+            }
+            if(Array.isArray(activity)) {
+                return { success: false, message: 'Invalid activity ID' };
+            }
+            const isParticipant = await this.activityService.isExisted(activity, uid);
+            if (!isParticipant) {
+                this.ctx.logger.info(`User ${uid} is not a participant of activity ${aid}`);
+                return { success: false, message: 'User is not a participant' };
+            }
+            this.ctx.logger.info(`User ${uid} cancelled participation in activity ${aid}`);
+            await this.activityService.removeParticipant(activity, uid);
+            return { success: true, message: 'Cancelled successfully' };
+        });
     }
 
     @Post('/create')

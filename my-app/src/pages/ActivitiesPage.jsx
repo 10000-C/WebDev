@@ -15,8 +15,11 @@ function ActivitiesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [triggerSearch, setTriggerSearch] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isParticipant, setIsParticipant] = useState([]);// 下标为 aid
   const apiClient = useApi();
   const navigate = useNavigate();
+  const userData = apiClient.getUserData();
+
   // 获取活动数据
   useEffect(() => {
     const fetchActivities = async () => {
@@ -52,18 +55,47 @@ function ActivitiesPage() {
       alert(`创建活动失败: ${error.message}`);
     }
   }; 
-  const handleApplication = async (activityId) => {
-    try {
-      console.log('申请活动:', activityId);
-      const params = {aid: activityId};
-      await apiClient.get('/activities/application', params);
-      alert('报名成功！');
-      setTriggerSearch(prev => prev + 1); // 刷新活动列表
-    } catch (error) {
-      console.error('报名失败:', error);
-      alert(`报名失败: ${error.message}`);
+  const handleApplication = async (activity) => {
+    const isParticipant = checkIsParticipant(activity);
+    const activityId = activity.id;
+    if(!isParticipant){
+      try {
+        console.log('申请活动:', activityId);
+        const params = {aid: activityId};
+        await apiClient.get('/activities/application', params);
+        alert('报名成功！');
+        setTriggerSearch(prev => prev + 1); // 刷新活动列表
+      } catch (error) {
+        console.error('报名失败:', error);
+        alert(`报名失败: ${error.message}`);
+      }
+    }
+    else{
+      try {
+        console.log('取消活动:', activityId);
+        const params = {aid: activityId};
+        await apiClient.get('/activities/cancel', params);
+        alert('取消成功！');
+        setTriggerSearch(prev => prev + 1); // 刷新活动列表
+      } catch (error) {
+        console.error('取消失败:', error);
+        alert(`取消失败: ${error.message}`);
+      }
     }
 };
+  const checkIsParticipant = (activity) => {
+      console.log('activity', activity);
+      if (!userData) {
+         return false;
+      }
+      if(activity.participantList.length > 0) {
+        for(const cuUid of activity.participantList)
+          if(cuUid == userData.id)
+            return true;
+      }
+
+      return false;
+  }
   return (
     <div className='min-h-screen flex flex-col bg-gradient-to-r from-blue-500 via-white to-blue-300'>
       <div className='container mx-auto p-4'>
@@ -130,7 +162,8 @@ function ActivitiesPage() {
                     price={activity.price}
                     cuNumber={activity.currentParticipants}
                     limitNumber={activity.maxParticipants}
-                    onApplyClick={() => handleApplication(activity.id)}
+                    isParticipant={checkIsParticipant(activity)}
+                    onApplyClick={() => handleApplication(activity)}
                     onDetailClick={() => navigate(`/activities/${activity.id}`)}
                   />
                 ))

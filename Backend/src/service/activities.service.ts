@@ -57,4 +57,16 @@ export class ActivityService {
     }
     return false;    
   }
+
+  async addParticipant(activity: Activity, uid: number) {
+    activity.currentParticipants += 1;
+    activity.participantList.push(uid);
+    return await this.updateActivity(activity);
+  }
+
+  async removeParticipant(activity: Activity, uid: number) { 
+    activity.currentParticipants -= 1;
+    activity.participantList = activity.participantList.filter(p => Number(p) !== uid);
+    return await this.updateActivity(activity);    
+  }
 }
